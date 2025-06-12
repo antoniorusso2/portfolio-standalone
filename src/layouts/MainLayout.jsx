@@ -1,47 +1,43 @@
-import { forwardRef, useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import Footer from "../components/Footer/Footer";
 import Navbar from "../components/Header/Navbar/Navbar";
 import Contacts from "../components/sections/Contacts";
 import Home from "../components/sections/Home";
 import Projects from "../components/sections/Projects";
 import SectionContainer from "../components/sections/SectionContainer";
+import { SectionProvider, useSection } from "../contexts/sectionContext";
+import useScrollHandler from "../hooks/useScrollHandler";
 
-export default function MainLAyout() {
-  //   const [currentSection, setCurrentSection] = useSectionHandler({ section: "home" });
+function LayoutContent() {
+  const { currentSection, setCurrentSection } = useSection();
+  const { handleWheel } = useScrollHandler({ currentSection, setCurrentSection });
 
-  const [currentSection, setCurrentSection] = useState("home");
-
-  const homeRef = useRef(null);
-  const projectsRef = useRef(null);
-  const contactsRef = useRef(null);
-
-  const sectionRefs = {
-    home: homeRef,
-    projects: projectsRef,
-    contacts: contactsRef,
-  };
-
-  const handleSectionChange = (section) => {
-    window.history.pushState(null, null, `#${section}`);
-
-    if (sectionRefs[section]) {
-      sectionRefs[section].current.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  };
+  useEffect(() => {
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    return () => window.removeEventListener("wheel", handleWheel);
+  }, [handleWheel]);
 
   return (
     <>
       <header>
-        <Navbar sectionChanger={handleSectionChange} />
+        <Navbar />
       </header>
 
-      <main>
-        <SectionContainer node={sectionRefs.home} id="home" children={<Home />} />
-        <SectionContainer node={sectionRefs.projects} id="projects" children={<Projects />} />
-        <SectionContainer node={sectionRefs.contacts} id="contacts" children={<Contacts />} />
+      <main className="">
+        <SectionContainer id="home" children={<Home />} />
+        <SectionContainer id="projects" children={<Projects />} />
+        <SectionContainer id="contacts" children={<Contacts />} />
       </main>
 
       <Footer />
     </>
+  );
+}
+
+export default function MainLayout() {
+  return (
+    <SectionProvider>
+      <LayoutContent />
+    </SectionProvider>
   );
 }

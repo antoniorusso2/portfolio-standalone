@@ -4,6 +4,7 @@
 :root {
   /* letter-spacing: var(--letter-spacing);
   font-optical-sizing: auto; */
+  overflow-y: hidden;
 
   --bg-color: #070020;
   --primary-color: #7c1327;
@@ -26,6 +27,11 @@
 .container {
   @apply mx-auto;
   max-width: 1200px;
+}
+
+section {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
 }
 
 h1,
