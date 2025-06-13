@@ -1,0 +1,6 @@
+nav {
+  background-color: var(--opacity-bg);
+
+  color: var(--text-color);
+  border-bottom: 1px solid var(--primary-color);
+}

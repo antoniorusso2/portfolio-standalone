@@ -6,6 +6,7 @@ const validSections = ["home", "projects", "contacts"];
 
 const getInitialSection = () => {
   const hash = window.location.hash?.replace("#", "");
+  console.log("initial section", hash);
   return validSections.includes(hash) ? hash : "home";
 };
 
@@ -23,6 +24,7 @@ export function SectionProvider({ children }) {
   };
 
   const handleSectionChange = (section) => {
+    console.log("handleSectionChange", section);
     window.history.pushState(null, null, `#${section}`);
 
     if (sectionRefs[section]?.current) {
